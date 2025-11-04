@@ -46,16 +46,15 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(var(--gray-light), 0.3);
   cursor: pointer;
   color: rgb(var(--black));
   transition: all 0.2s ease;
   border-radius: 8px;
+  padding: 0.5rem;
 }
 
 .theme-toggle:hover {
   background: rgba(var(--gray-light), 0.6);
-  border-color: rgba(var(--gray), 0.4);
   transform: scale(1.05);
 }
 </style>
