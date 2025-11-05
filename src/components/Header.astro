@@ -1,7 +1,21 @@
 ---
 import { SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
 import HeaderLink from './HeaderLink.astro';
-import ThemeToggle from '../components/ui/ThemeToggle.vue'
+import ThemeToggle from './ThemeToggle.vue';
+import Search from './Search.vue';
+
+const posts = await getCollection('blog');
+const searchData = posts.map((post) => ({
+	id: post.id,
+	data: {
+		title: post.data.title,
+		description: post.data.description,
+		pubDate: post.data.pubDate,
+		tags: post.data.tags || [],
+		categories: post.data.categories || [],
+	},
+}));
 ---
 
 <header class="m-0 px-4 bg-white dark:bg-gray-900 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-colors">
@@ -9,10 +23,14 @@ import ThemeToggle from '../components/ui/ThemeToggle.vue'
 		<h2 class="m-0! text-base!">
 			<a href="/" class="no-underline">{SITE_TITLE}</a>
 		</h2>
-		<div class="flex items-center">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+		<div class="flex items-center gap-2">
+			<HeaderLink href="/">首页</HeaderLink>
+			<HeaderLink href="/blog">博客</HeaderLink>
+			<HeaderLink href="/categories">分类</HeaderLink>
+			<HeaderLink href="/tags">标签</HeaderLink>
+			<HeaderLink href="/archive">归档</HeaderLink>
+			<HeaderLink href="/about">关于</HeaderLink>
+			<Search client:load posts={searchData} />
 			<ThemeToggle class="px-[0.5em]" client:load />
 		</div>
 	</nav>
@@ -33,6 +51,6 @@ import ThemeToggle from '../components/ui/ThemeToggle.vue'
 	}
 	nav a.active {
 		text-decoration: none;
-		color: var(--accent);
+		color: var(--title);
 	}
 </style>
