@@ -6,86 +6,86 @@ tags: ["前端笔记"]
 categories: ["前端笔记"]
 ---
 
-# vue3-ts-vite集成electron记录
-
 ## 安装electron、electron-builder
 
 > npm install --save-dev electron electron-builder
 
 ## 准备工作
 
-> 项目目录结构
->
-> │  .cz-config.js
-> │  .env
-> │  .env.development
-> │  .env.production
-> │  .eslintrc.cjs
-> │  .gitignore
-> │  .npmrc
-> │  .prettierrc.json
-> │  catalogTree.txt
-> │  commitlint.config.cjs
-> │  env.d.ts
-> │  index.html
-> │  package.json
-> │  pnpm-lock.yaml
-> │  README.md
-> │  tsconfig.app.json
-> │  tsconfig.json
-> │  tsconfig.node.json
-> │  uno.config.ts
-> │  vite.config.ts
-> │  
-> ├─.husky
-> │      commit-msg
-> │      pre-commit
-> │      
-> ├─.vscode
-> │      extensions.json
-> │      
-> ├─electron
-> │  │  background.ts
-> │  │  
-> │  ├─plugins
-> │  │      vite-electron-build.ts
-> │  │      vite-electron-dev.ts
-> │  │      
-> │  ├─preload
-> │  │      index.ts
-> │  │      
-> │  └─utils
-> │          build.ts
-> │          handle-files.ts
-> │          
-> ├─public
-> │      favicon.ico
-> │      
-> └─src
->     │  App.vue
->     │  env.d.ts
->     │  global.d.ts
->     │  main.ts
->     │  
->     ├─assets
->     │      base.css
->     │      logo.svg
->     │      main.css
->     │      
->     ├─request
->     │      index.ts
->     │      
->     ├─router
->     │      index.ts
->     │      
->     ├─stores
->     │      counter.ts
->     │      
->     ├─utils
->     │      indexed-db.ts
->     │      
->     └─views
->             ThreeDemo.vue
+项目目录结构
+
+```
+│  .cz-config.js
+│  .env
+│  .env.development
+│  .env.production
+│  .eslintrc.cjs
+│  .gitignore
+│  .npmrc
+│  .prettierrc.json
+│  catalogTree.txt
+│  commitlint.config.cjs
+│  env.d.ts
+│  index.html
+│  package.json
+│  pnpm-lock.yaml
+│  README.md
+│  tsconfig.app.json
+│  tsconfig.json
+│  tsconfig.node.json
+│  uno.config.ts
+│  vite.config.ts
+│  
+├─.husky
+│      commit-msg
+│      pre-commit
+│      
+├─.vscode
+│      extensions.json
+│      
+├─electron
+│  │  background.ts
+│  │  
+│  ├─plugins
+│  │      vite-electron-build.ts
+│  │      vite-electron-dev.ts
+│  │      
+│  ├─preload
+│  │      index.ts
+│  │      
+│  └─utils
+│          build.ts
+│          handle-files.ts
+│          
+├─public
+│      favicon.ico
+│      
+└─src
+    │  App.vue
+    │  env.d.ts
+    │  global.d.ts
+    │  main.ts
+    │  
+    ├─assets
+    │      base.css
+    │      logo.svg
+    │      main.css
+    │      
+    ├─request
+    │      index.ts
+    │      
+    ├─router
+    │      index.ts
+    │      
+    ├─stores
+    │      counter.ts
+    │      
+    ├─utils
+    │      indexed-db.ts
+    │      
+    └─views
+            ThreeDemo.vue
+```
 
 ### 根目录新建electron文件夹
 

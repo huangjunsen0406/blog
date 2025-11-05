@@ -154,14 +154,11 @@ const { posts, category } = Astro.props;
 				<ul class="blog-list">
 					{
 						posts.map((post) => {
-							const readTime = '3 min read';
-
 							return (
 								<li class="blog-item">
 									<a href={`/blog/${post.id}/`} class="blog-link">
 										<h2 class="blog-title">{post.data.title}</h2>
 										<div class="blog-meta">
-											<span class="read-time">{readTime}</span>
 											<span class="meta-separator">•</span>
 											<span class="pub-date">
 												<FormattedDate date={post.data.pubDate} />

@@ -6,11 +6,7 @@ tags: ["自动化"]
 categories: ["自动化"]
 ---
 
-# 使用picgo配合easyImage搭建富文本粘贴自动上传
-
-
-
-```
+```js
 body：{"token":"你的简单图床apitoken"}
 ```
 

@@ -20,39 +20,275 @@ const searchData = posts.map((post) => ({
 
 <header class="m-0 px-4 bg-white dark:bg-gray-900 shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-colors">
 	<nav class="flex items-center justify-between">
-		<h2 class="m-0! text-base!">
+		<h2 class="m-0! text-base! site-title">
 			<a href="/" class="no-underline">{SITE_TITLE}</a>
 		</h2>
-		<div class="flex items-center gap-2">
-			<HeaderLink href="/">首页</HeaderLink>
-			<HeaderLink href="/blog">博客</HeaderLink>
-			<HeaderLink href="/categories">分类</HeaderLink>
-			<HeaderLink href="/tags">标签</HeaderLink>
-			<HeaderLink href="/archive">归档</HeaderLink>
-			<HeaderLink href="/projects">项目</HeaderLink>
-			<HeaderLink href="/friends">友链</HeaderLink>
-			<HeaderLink href="/about">关于</HeaderLink>
-			<Search client:load posts={searchData} />
-			<ThemeToggle class="px-[0.5em]" client:load />
+		
+		<!-- 汉堡菜单按钮 -->
+		<button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+
+		<!-- 导航菜单 -->
+		<div class="nav-menu">
+			<div class="nav-links">
+				<HeaderLink href="/">首页</HeaderLink>
+				<HeaderLink href="/blog">博客</HeaderLink>
+				<HeaderLink href="/categories">分类</HeaderLink>
+				<HeaderLink href="/tags">标签</HeaderLink>
+				<HeaderLink href="/archive">归档</HeaderLink>
+				<HeaderLink href="/projects">项目</HeaderLink>
+				<HeaderLink href="/friends">友链</HeaderLink>
+				<HeaderLink href="/about">关于</HeaderLink>
+			</div>
+			<div class="nav-actions">
+				<Search client:load posts={searchData} />
+				<ThemeToggle class="px-[0.5em]" client:load />
+			</div>
 		</div>
 	</nav>
 </header>
 
+<script>
+	const hamburger = document.querySelector('.hamburger');
+	const navMenu = document.querySelector('.nav-menu');
+	
+	hamburger?.addEventListener('click', () => {
+		hamburger.classList.toggle('active');
+		navMenu?.classList.toggle('active');
+		const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+		hamburger.setAttribute('aria-expanded', String(!isExpanded));
+	});
+
+	// 点击导航链接后关闭菜单
+	document.querySelectorAll('.nav-links a').forEach(link => {
+		link.addEventListener('click', () => {
+			hamburger?.classList.remove('active');
+			navMenu?.classList.remove('active');
+			hamburger?.setAttribute('aria-expanded', 'false');
+		});
+	});
+</script>
+
 <style>
+	header {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+	}
 
 	nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		position: relative;
 	}
+
+	.nav-menu {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
 	nav a {
 		padding: 1em 0.5em;
 		color: var(--black);
 		text-decoration: none;
 		font-weight: normal;
 	}
+	
 	nav a.active {
 		text-decoration: none;
 		color: var(--title);
+	}
+
+	/* 汉堡菜单按钮 */
+	.hamburger {
+		display: none;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 30px;
+		height: 24px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		z-index: 101;
+	}
+
+	.hamburger span {
+		width: 100%;
+		height: 3px;
+		background-color: rgb(var(--gray));
+		transition: all 0.3s ease;
+		border-radius: 2px;
+	}
+
+	.dark .hamburger span {
+		background-color: rgb(var(--gray-light));
+	}
+
+	.hamburger.active span:nth-child(1) {
+		transform: translateY(10.5px) rotate(45deg);
+	}
+
+	.hamburger.active span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.hamburger.active span:nth-child(3) {
+		transform: translateY(-10.5px) rotate(-45deg);
+	}
+
+	/* 平板适配 */
+	@media (max-width: 1024px) {
+		.nav-links {
+			gap: 0.3rem;
+		}
+		nav a {
+			padding: 1em 0.4em;
+			font-size: 0.9rem;
+		}
+	}
+
+	/* 移动端适配 */
+	@media (max-width: 768px) {
+		header {
+			padding: 0 1rem;
+			min-height: 60px;
+		}
+
+		nav {
+			min-height: 60px;
+		}
+
+		.hamburger {
+			display: flex;
+		}
+
+		.hamburger span {
+			background-color: #e2e8f0;
+		}
+
+		.dark .hamburger span {
+			background-color: #cbd5e0;
+		}
+
+		.hamburger.active span {
+			background-color: #fff;
+		}
+
+		.nav-menu {
+			position: fixed;
+			top: 0;
+			right: -100%;
+			width: 280px;
+			height: 100vh;
+			background: #2d3748;
+			flex-direction: column;
+			align-items: flex-start;
+			padding: 5rem 2rem 2rem;
+			gap: 2rem;
+			transition: right 0.3s ease;
+			box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+			overflow-y: auto;
+		}
+
+		.dark .nav-menu {
+			background: #1a202c;
+		}
+
+		.nav-menu.active {
+			right: 0;
+		}
+
+		.nav-links {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0;
+			width: 100%;
+		}
+
+		.nav-links a {
+			width: 100%;
+			padding: 0.8rem 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			color: #fff;
+		}
+
+		.nav-links a:hover,
+		.nav-links a.active {
+			color: #6b7fff;
+		}
+
+		.nav-actions {
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 2rem;
+			width: 100%;
+			padding-top: 1.5rem;
+			margin-top: 1rem;
+		}
+
+		/* 搜索和主题切换按钮在移动端的样式 */
+		.nav-actions :global(button),
+		.nav-actions :global(.search-button) {
+			color: #fff !important;
+			background: transparent !important;
+		}
+
+		.nav-actions :global(svg) {
+			width: 28px !important;
+			height: 28px !important;
+			color: #e2e8f0 !important;
+		}
+
+		.nav-actions :global(button:hover svg),
+		.nav-actions :global(.search-button:hover svg) {
+			color: #6b7fff !important;
+		}
+
+		.site-title {
+			font-size: 1rem !important;
+		}
+
+		.site-title a {
+			padding: 0;
+		}
+	}
+
+	@media (max-width: 480px) {
+		header {
+			padding: 0 0.75rem;
+			min-height: 56px;
+		}
+
+		nav {
+			min-height: 56px;
+		}
+
+		.nav-menu {
+			width: 250px;
+			padding: 4.5rem 1.5rem 1.5rem;
+		}
+
+		.site-title {
+			font-size: 0.9rem !important;
+		}
 	}
 </style>

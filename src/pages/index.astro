@@ -57,9 +57,44 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       }
 
       @media (max-width: 720px) {
-        main { padding: 2rem 1rem; }
-        h1 { font-size: 2rem; }
-        h2 { font-size: 1.25rem; }
+        main { 
+          padding: 2rem 1rem; 
+          width: 100%;
+        }
+        h1 { 
+          font-size: 1.75rem;
+          margin-bottom: 1.5rem; 
+        }
+        h2 { 
+          font-size: 1.25rem;
+          margin-top: 2rem; 
+        }
+        p {
+          font-size: 0.95rem;
+        }
+        .tags {
+          gap: 0.4rem;
+        }
+        .tag {
+          font-size: 0.8rem;
+          padding: 0.2rem 0.6rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        main { 
+          padding: 1.5rem 0.75rem; 
+        }
+        h1 { 
+          font-size: 1.5rem;
+        }
+        h2 { 
+          font-size: 1.1rem;
+        }
+        .tag {
+          font-size: 0.75rem;
+          padding: 0.15rem 0.5rem;
+        }
       }
     </style>
   </head>
@@ -70,7 +105,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
       <div class="intro">
         <p>
-          我是 Junsen，一名偏实战的全栈与工具链工程师，常年在
+          我是 Junsen，一名全栈与工具链工程师，常年在
           <strong>AI 助手</strong>、<strong>开发者工具</strong> 和
           <strong>MCP 生态</strong>里做工程落地与开源贡献。目前就职于
           南方电网人工智能有限公司，主要负责前端与可视化相关工作。

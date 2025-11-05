@@ -6,11 +6,9 @@ tags: ["环境配置"]
 categories: ["环境配置"]
 ---
 
-# 新环境配置git多配置
-
 ## 创建文件
 
-```
+```bash
 ssh-keygen -t rsa -C 'xxx@qq.com' -f ~/.ssh/gitee_id_rsa
 ssh-keygen -t rsa -C 'xxx@qq.com' -f ~/.ssh/github_id_rsa
 ssh-keygen -t rsa -C 'xxx@qq.com' -f ~/.ssh/gitlab_id_rsa

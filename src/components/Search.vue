@@ -329,13 +329,171 @@ kbd {
   background: rgb(var(--gray));
 }
 
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+    padding-top: 3rem;
+    align-items: flex-start;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-height: calc(100vh - 4rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-header {
+    padding: 0.875rem;
+  }
+
+  .search-input {
+    font-size: 0.95rem;
+  }
+
+  .search-results {
+    max-height: calc(100vh - 12rem);
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .result-item {
+    padding: 0.875rem;
+  }
+
+  .result-title {
+    font-size: 0.95rem;
+  }
+
+  .result-desc {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .result-tags {
+    gap: 0.375rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+  }
+
+  .search-footer {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .hint {
+    font-size: 0.7rem;
+  }
+}
+
 @media (max-width: 640px) {
   .modal-overlay {
-    padding-top: 5vh;
+    padding: 0.75rem;
+    padding-top: 2rem;
+  }
+
+  .modal-content {
+    max-height: calc(100vh - 3rem);
+  }
+
+  .search-header {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .search-input {
+    font-size: 0.9rem;
+  }
+
+  .search-results {
+    max-height: calc(100vh - 10rem);
+  }
+
+  .result-item {
+    padding: 0.75rem;
+  }
+
+  .result-title {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .result-desc {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .search-hint {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .modal-content {
+    max-height: calc(100vh - 2.5rem);
+    border-radius: 0.5rem;
+  }
+
+  .search-header {
+    padding: 0.625rem;
+  }
+
+  .search-results {
+    max-height: calc(100vh - 9rem);
+  }
+
+  .result-item {
+    padding: 0.625rem;
+  }
+
+  .result-title {
+    font-size: 0.875rem;
+  }
+
+  .result-desc {
+    font-size: 0.7rem;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    margin-bottom: 0.375rem;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+  }
+
+  .search-footer {
+    padding: 0.5rem 0.625rem;
+  }
+
+  kbd {
+    font-size: 0.7rem;
+  }
+}
+
+/* 极小屏幕 */
+@media (max-width: 360px) {
+  .modal-content {
+    max-height: calc(100vh - 2rem);
+  }
+
+  .search-results {
+    max-height: calc(100vh - 8rem);
+  }
+
+  .result-title {
+    font-size: 0.85rem;
   }
 }
 </style>

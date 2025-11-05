@@ -96,17 +96,62 @@ const { page } = Astro.props;
 				content: '# ';
 			}
 
-			@media (max-width: 720px) {
+			/* 平板适配 */
+			@media (max-width: 1024px) {
+				main {
+					width: 100%;
+					padding: 2.5rem 1.5rem;
+				}
+			}
+
+			/* 移动端适配 */
+			@media (max-width: 768px) {
 				main {
 					padding: 2rem 1rem;
 				}
 
+				.blog-item {
+					padding: 1.25rem 0;
+				}
+
 				.blog-title {
 					font-size: 1.125rem;
+					margin-bottom: 0.5rem;
 				}
 
 				.blog-meta {
 					font-size: 0.8rem;
+					gap: 0.5rem;
+				}
+
+				.tags {
+					gap: 0.4rem;
+				}
+			}
+
+			/* 小屏手机适配 */
+			@media (max-width: 480px) {
+				main {
+					padding: 1.5rem 0.75rem;
+				}
+
+				.blog-item {
+					padding: 1rem 0;
+				}
+
+				.blog-title {
+					font-size: 1rem;
+					line-height: 1.5;
+				}
+
+				.blog-meta {
+					font-size: 0.75rem;
+					gap: 0.4rem;
+				}
+
+				.tags {
+					display: flex;
+					flex-wrap: wrap;
 				}
 			}
 		</style>
@@ -118,15 +163,12 @@ const { page } = Astro.props;
 				<ul class="blog-list">
 					{
 						page.data.map((post) => {
-							const readTime = '3 min read';
-
 							return (
 								<li class="blog-item">
 									<a href={`/blog/${post.id}/`} class="blog-link">
 										<h2 class="blog-title">{post.data.title}</h2>
 									</a>
 									<div class="blog-meta">
-										<span class="read-time">{readTime}</span>
 										<span class="meta-separator">•</span>
 										<span class="pub-date">
 											<FormattedDate date={post.data.pubDate} />

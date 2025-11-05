@@ -70,4 +70,42 @@ const today = new Date();
 	.beian a:hover {
 		color: rgb(var(--gray-dark));
 	}
+
+	@media (max-width: 720px) {
+		footer {
+			padding: 1.5em 1em 4em 1em;
+		}
+		.social-links {
+			gap: 1.2em;
+		}
+		.social-links svg {
+			width: 22px;
+			height: 22px;
+		}
+		.copyright {
+			font-size: 0.9em;
+		}
+		.beian {
+			font-size: 0.85em;
+		}
+	}
+
+	@media (max-width: 480px) {
+		footer {
+			padding: 1.5em 0.75rem 3em 0.75rem;
+		}
+		.social-links {
+			gap: 1em;
+		}
+		.social-links svg {
+			width: 20px;
+			height: 20px;
+		}
+		.copyright {
+			font-size: 0.85em;
+		}
+		.beian {
+			font-size: 0.8em;
+		}
+	}
 </style>

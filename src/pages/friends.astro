@@ -134,13 +134,31 @@ const friends = [
 				padding: 0.25rem 0;
 			}
 
-			@media (max-width: 720px) {
+			/* 平板适配 */
+			@media (max-width: 1024px) {
+				main {
+					width: 100%;
+					padding: 2.5rem 1.5rem;
+				}
+
+				.friends-list {
+					grid-template-columns: repeat(3, 1fr);
+				}
+			}
+
+			/* 移动端适配 */
+			@media (max-width: 768px) {
 				main {
 					padding: 2rem 1rem;
 				}
 
 				.page-title {
 					font-size: 1.5rem;
+				}
+
+				.page-intro {
+					font-size: 0.95rem;
+					margin-bottom: 2rem;
 				}
 
 				.friends-list {
@@ -160,11 +178,47 @@ const friends = [
 				.friend-description {
 					font-size: 0.8rem;
 				}
+
+				.apply-title {
+					font-size: 1.1rem;
+				}
+
+				.apply-description,
+				.apply-format {
+					font-size: 0.85rem;
+				}
 			}
 
+			/* 小屏手机适配 */
 			@media (max-width: 480px) {
+				main {
+					padding: 1.5rem 0.75rem;
+				}
+
+				.page-title {
+					font-size: 1.25rem;
+				}
+
 				.friends-list {
 					grid-template-columns: 1fr;
+					gap: 0.875rem;
+				}
+
+				.friend-avatar {
+					width: 52px;
+					height: 52px;
+				}
+
+				.friend-name {
+					font-size: 0.875rem;
+				}
+
+				.friend-description {
+					font-size: 0.75rem;
+				}
+
+				.apply-title {
+					font-size: 1rem;
 				}
 			}
 		</style>

@@ -89,13 +89,67 @@ const tags = Array.from(tagMap.entries())
 				color: var(--ring);
 			}
 
-			@media (max-width: 720px) {
+			/* 平板适配 */
+			@media (max-width: 1024px) {
+				main {
+					width: 100%;
+					padding: 2.5rem 1.5rem;
+				}
+			}
+
+			/* 移动端适配 */
+			@media (max-width: 768px) {
 				main {
 					padding: 2rem 1rem;
 				}
 
 				.page-title {
 					font-size: 1.5rem;
+					margin-bottom: 1.5rem;
+				}
+
+				.tags-container {
+					gap: 0.75rem;
+				}
+
+				.tag-item {
+					padding: 0.4rem 0.8rem;
+				}
+
+				.tag-name {
+					font-size: 0.8rem;
+				}
+
+				.tag-count {
+					font-size: 0.7rem;
+					padding: 0.1rem 0.4rem;
+				}
+			}
+
+			/* 小屏手机适配 */
+			@media (max-width: 480px) {
+				main {
+					padding: 1.5rem 0.75rem;
+				}
+
+				.page-title {
+					font-size: 1.25rem;
+				}
+
+				.tags-container {
+					gap: 0.5rem;
+				}
+
+				.tag-item {
+					padding: 0.35rem 0.7rem;
+				}
+
+				.tag-name {
+					font-size: 0.75rem;
+				}
+
+				.tag-count {
+					font-size: 0.65rem;
 				}
 
 				.tags-container {
