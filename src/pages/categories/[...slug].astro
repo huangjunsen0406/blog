@@ -1,0 +1,190 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+export const getStaticPaths = (async () => {
+	const posts = await getCollection('blog');
+
+	// 收集所有分类
+	const categories = new Set<string>();
+	posts.forEach((post) => {
+		if (post.data.categories) {
+			post.data.categories.forEach((category) => {
+				categories.add(category);
+			});
+		}
+	});
+
+	// 为每个分类生成路径
+	return Array.from(categories).map((category) => {
+		const filteredPosts = posts
+			.filter((post) => post.data.categories?.includes(category))
+			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+		return {
+			params: { slug: category },
+			props: { posts: filteredPosts, category },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+type Props = {
+	posts: CollectionEntry<'blog'>[];
+	category: string;
+};
+
+const { posts, category } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`分类: ${category} | ${SITE_TITLE}`} description={`分类 ${category} 下的所有文章`} />
+		<style>
+			main {
+				width: 800px;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+
+			.page-header {
+				margin-bottom: 2rem;
+			}
+
+			.page-title {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+				color: rgb(var(--black));
+			}
+
+			.page-subtitle {
+				color: var(--ring);
+				font-size: 0.875rem;
+			}
+
+			.blog-list {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.blog-item {
+				padding: 1.5rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+
+			.blog-item:last-child {
+				border-bottom: none;
+			}
+
+			.blog-link {
+				text-decoration: none;
+				display: block;
+			}
+
+			.blog-title:hover,
+			.read-time:hover,
+			.pub-date:hover,
+			.tag:hover {
+				color: var(--title);
+			}
+
+			.blog-title {
+				font-size: 1.25rem;
+				font-weight: 400;
+				margin: 0 0 0.75rem 0;
+				color: rgb(var(--black));
+				line-height: 1.6;
+				transition: color 0.2s ease;
+			}
+
+			.blog-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+				font-size: 0.875rem;
+				color: var(--ring);
+			}
+
+			.tags {
+				display: flex;
+				gap: 0.5rem;
+			}
+
+			.tag::before {
+				content: '# ';
+			}
+
+			@media (max-width: 720px) {
+				main {
+					padding: 2rem 1rem;
+				}
+
+				.page-title {
+					font-size: 1.5rem;
+				}
+
+				.blog-title {
+					font-size: 1.125rem;
+				}
+
+				.blog-meta {
+					font-size: 0.8rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1 class="page-title">分类: {category}</h1>
+				<p class="page-subtitle">{posts.length} 篇文章</p>
+			</div>
+			<section>
+				<ul class="blog-list">
+					{
+						posts.map((post) => {
+							const readTime = '3 min read';
+
+							return (
+								<li class="blog-item">
+									<a href={`/blog/${post.id}/`} class="blog-link">
+										<h2 class="blog-title">{post.data.title}</h2>
+										<div class="blog-meta">
+											<span class="read-time">{readTime}</span>
+											<span class="meta-separator">•</span>
+											<span class="pub-date">
+												<FormattedDate date={post.data.pubDate} />
+											</span>
+											{post.data.tags && post.data.tags.length > 0 && (
+												<>
+													<span class="meta-separator">•</span>
+													<div class="tags">
+														{post.data.tags.map((tag) => (
+															<span class="tag">{tag}</span>
+														))}
+													</div>
+												</>
+											)}
+										</div>
+									</a>
+								</li>
+							);
+						})
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

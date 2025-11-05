@@ -1,0 +1,179 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import SimplePagination from '../../components/SimplePagination.vue';
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const posts = (await getCollection('blog'))
+		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	return paginate(posts, { pageSize: 5 });
+}) satisfies GetStaticPaths;
+
+type Props = {
+	page: Page<CollectionEntry<'blog'>>;
+};
+
+const { page } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 800px;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+
+			.blog-list {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.blog-item {
+				padding: 1.5rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+
+			.blog-item:last-child {
+				border-bottom: none;
+			}
+
+			.blog-link {
+				text-decoration: none;
+				display: block;
+			}
+
+			.blog-title:hover {
+				color: var(--title);
+			}
+
+			.category, .tag {
+				cursor: pointer;
+				transition: color 0.2s ease;
+				text-decoration: none;
+				color: var(--ring);
+			}
+
+			.category:hover, .tag:hover {
+				color: var(--title);
+			}
+
+			.tags {
+				display: flex;
+				gap: 0.5rem;
+			}
+
+			.blog-title {
+				font-size: 1.25rem;
+				font-weight: 400;
+				margin: 0 0 0.75rem 0;
+				color: rgb(var(--black));
+				line-height: 1.6;
+				transition: color 0.2s ease;
+			}
+
+			.blog-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+				font-size: 0.875rem;
+				color: var(--ring);
+			}
+
+			.tag::before {
+				content: '# ';
+			}
+
+			@media (max-width: 720px) {
+				main {
+					padding: 2rem 1rem;
+				}
+
+				.blog-title {
+					font-size: 1.125rem;
+				}
+
+				.blog-meta {
+					font-size: 0.8rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section>
+				<ul class="blog-list">
+					{
+						page.data.map((post) => {
+							const readTime = '3 min read';
+
+							return (
+								<li class="blog-item">
+									<a href={`/blog/${post.id}/`} class="blog-link">
+										<h2 class="blog-title">{post.data.title}</h2>
+									</a>
+									<div class="blog-meta">
+										<span class="read-time">{readTime}</span>
+										<span class="meta-separator">•</span>
+										<span class="pub-date">
+											<FormattedDate date={post.data.pubDate} />
+										</span>
+										{post.data.categories && post.data.categories.length > 0 && (
+											<>
+												<span class="meta-separator">•</span>
+												{post.data.categories.map((category, index) => (
+													<>
+														<a href={`/categories/${encodeURIComponent(category)}/`} class="category">
+															{category}
+														</a>
+														{index < (post.data.categories?.length ?? 0) - 1 && <span>,</span>}
+													</>
+												))}
+											</>
+										)}
+										{post.data.tags && post.data.tags.length > 0 && (
+											<>
+												<span class="meta-separator">•</span>
+												<div class="tags">
+													{post.data.tags.map((tag) => (
+														<a href={`/tags/${encodeURIComponent(tag)}/`} class="tag">
+															{tag}
+														</a>
+													))}
+												</div>
+											</>
+										)}
+									</div>
+								</li>
+							);
+						})
+					}
+				</ul>
+				<div style="margin-top: 3rem;">
+					<SimplePagination
+						client:load
+						current={page.currentPage}
+						last={page.lastPage}
+						base="/blog"
+						itemsPerPage={page.size}
+						total={page.total}
+					/>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

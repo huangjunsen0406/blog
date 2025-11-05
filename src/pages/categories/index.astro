@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+
+// 统计分类及其文章数量
+const categoryMap = new Map<string, number>();
+posts.forEach((post) => {
+	if (post.data.categories) {
+		post.data.categories.forEach((category) => {
+			categoryMap.set(category, (categoryMap.get(category) || 0) + 1);
+		});
+	}
+});
+
+// 按文章数量降序排序
+const categories = Array.from(categoryMap.entries())
+	.sort((a, b) => b[1] - a[1])
+	.map(([name, count]) => ({ name, count }));
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`分类 | ${SITE_TITLE}`} description="博客分类列表" />
+		<style>
+			main {
+				width: 800px;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+
+			.page-title {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 2rem;
+				color: rgb(var(--black));
+			}
+
+			.categories-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+				gap: 1.5rem;
+				margin-top: 2rem;
+			}
+
+			.category-card {
+				padding: 1.5rem;
+				border-radius: 0.5rem;
+				border: 1px solid rgb(var(--gray-light));
+				text-decoration: none;
+				transition: all 0.2s ease;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+			}
+
+			.category-card:hover {
+				border-color: var(--title);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+
+			.category-name {
+				font-size: 1.125rem;
+				font-weight: 500;
+				color: rgb(var(--black));
+			}
+
+			.category-count {
+				font-size: 0.875rem;
+				color: var(--ring);
+			}
+
+			.empty-state {
+				text-align: center;
+				padding: 3rem 0;
+				color: var(--ring);
+			}
+
+			@media (max-width: 720px) {
+				main {
+					padding: 2rem 1rem;
+				}
+
+				.page-title {
+					font-size: 1.5rem;
+				}
+
+				.categories-grid {
+					grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+					gap: 1rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">分类</h1>
+			{
+				categories.length > 0 ? (
+					<div class="categories-grid">
+						{categories.map(({ name, count }) => (
+							<a href={`/categories/${encodeURIComponent(name)}/`} class="category-card">
+								<span class="category-name">{name}</span>
+								<span class="category-count">{count} 篇文章</span>
+							</a>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">暂无分类</div>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

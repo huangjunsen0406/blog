@@ -1,8 +1,11 @@
 ---
 title: 'JavaScript内功修炼：编译原理、执行上下文与作用域链全方位实战解析'
-description: ''
+description: '前端笔记'
 pubDate: '2024-03-18 01:51:00'
+tags: ["前端笔记"]
+categories: ["前端笔记"]
 ---
+
 
 # JavaScript内功修炼：编译原理、执行上下文与作用域链全方位实战解析
 

@@ -1,0 +1,194 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 按年份分组
+const postsByYear = posts.reduce((acc, post) => {
+	const year = post.data.pubDate.getFullYear();
+	if (!acc[year]) {
+		acc[year] = [];
+	}
+	acc[year].push(post);
+	return acc;
+}, {} as Record<number, CollectionEntry<'blog'>[]>);
+
+// 获取年份列表并排序（从新到旧）
+const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Archive - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 800px;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+
+			.page-title {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 2rem;
+				color: rgb(var(--black));
+			}
+
+			.year-section {
+				margin-bottom: 3rem;
+			}
+
+			.year-header {
+				font-size: 1.5rem;
+				font-weight: 600;
+				margin-bottom: 1.5rem;
+				color: rgb(var(--black));
+				border-bottom: 2px solid rgb(var(--gray-light));
+				padding-bottom: 0.5rem;
+			}
+
+			.post-list {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.post-item {
+				padding: 1rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+				display: flex;
+				gap: 1rem;
+				align-items: baseline;
+			}
+
+			.post-item:last-child {
+				border-bottom: none;
+			}
+
+			.post-date {
+				flex-shrink: 0;
+				font-size: 0.875rem;
+				color: var(--ring);
+				min-width: 5rem;
+			}
+
+			.post-link {
+				text-decoration: none;
+				flex: 1;
+			}
+
+			.post-title {
+				font-size: 1.125rem;
+				font-weight: 400;
+				margin: 0;
+				color: rgb(var(--black));
+				line-height: 1.6;
+				transition: color 0.2s ease;
+			}
+
+			.post-title:hover {
+				color: var(--title);
+			}
+
+			.post-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				flex-wrap: wrap;
+				font-size: 0.8rem;
+				color: var(--ring);
+				margin-top: 0.25rem;
+			}
+
+			.tag::before {
+				content: '# ';
+			}
+
+			@media (max-width: 720px) {
+				main {
+					padding: 2rem 1rem;
+				}
+
+				.page-title {
+					font-size: 1.5rem;
+				}
+
+				.year-header {
+					font-size: 1.25rem;
+				}
+
+				.post-item {
+					flex-direction: column;
+					gap: 0.5rem;
+				}
+
+				.post-date {
+					min-width: auto;
+				}
+
+				.post-title {
+					font-size: 1rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">Archive</h1>
+			{
+				years.map((year) => (
+					<section class="year-section">
+						<h2 class="year-header">{year}</h2>
+						<ul class="post-list">
+							{postsByYear[year].map((post) => (
+								<li class="post-item">
+									<span class="post-date">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+									<a href={`/blog/${post.id}/`} class="post-link">
+										<h3 class="post-title">{post.data.title}</h3>
+										{(post.data.categories || post.data.tags) && (
+											<div class="post-meta">
+												{post.data.categories && post.data.categories.length > 0 && (
+													<>
+														{post.data.categories.map((category, index) => (
+															<>
+																<span class="category">{category}</span>
+																{index < (post.data.categories?.length ?? 0) - 1 && <span>,</span>}
+															</>
+														))}
+													</>
+												)}
+												{post.data.tags && post.data.tags.length > 0 && (
+													<>
+														{post.data.categories && post.data.categories.length > 0 && (
+															<span class="meta-separator">•</span>
+														)}
+														{post.data.tags.map((tag) => (
+															<span class="tag">{tag}</span>
+														))}
+													</>
+												)}
+											</div>
+										)}
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

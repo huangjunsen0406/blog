@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+
+// 统计标签及其文章数量
+const tagMap = new Map<string, number>();
+posts.forEach((post) => {
+	if (post.data.tags) {
+		post.data.tags.forEach((tag) => {
+			tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+		});
+	}
+});
+
+// 按文章数量降序排序
+const tags = Array.from(tagMap.entries())
+	.sort((a, b) => b[1] - a[1])
+	.map(([name, count]) => ({ name, count }));
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`标签 | ${SITE_TITLE}`} description="博客标签列表" />
+		<style>
+			main {
+				width: 800px;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+
+			.page-title {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 2rem;
+				color: rgb(var(--black));
+			}
+
+			.tags-container {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1rem;
+				margin-top: 2rem;
+			}
+
+			.tag-item {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.5rem 1rem;
+				border-radius: 9999px;
+				border: 1px solid rgb(var(--gray-light));
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			.tag-item:hover {
+				border-color: var(--title);
+				background-color: rgba(var(--gray-light), 0.3);
+			}
+
+			.tag-name {
+				font-size: 0.875rem;
+				color: rgb(var(--black));
+			}
+
+			.tag-name::before {
+				content: '# ';
+				color: var(--ring);
+			}
+
+			.tag-count {
+				font-size: 0.75rem;
+				color: var(--ring);
+				background-color: rgba(var(--gray-light), 0.5);
+				padding: 0.125rem 0.5rem;
+				border-radius: 9999px;
+			}
+
+			.empty-state {
+				text-align: center;
+				padding: 3rem 0;
+				color: var(--ring);
+			}
+
+			@media (max-width: 720px) {
+				main {
+					padding: 2rem 1rem;
+				}
+
+				.page-title {
+					font-size: 1.5rem;
+				}
+
+				.tags-container {
+					gap: 0.75rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">标签</h1>
+			{
+				tags.length > 0 ? (
+					<div class="tags-container">
+						{tags.map(({ name, count }) => (
+							<a href={`/tags/${encodeURIComponent(name)}/`} class="tag-item">
+								<span class="tag-name">{name}</span>
+								<span class="tag-count">{count}</span>
+							</a>
+						))}
+					</div>
+				) : (
+					<div class="empty-state">暂无标签</div>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
