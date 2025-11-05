@@ -31,7 +31,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 			main {
 				width: 100%;
 				max-width: 1400px;
-				margin: 0 auto;
+				margin: 50px auto 0 auto;
 				padding: 0 2rem;
 			}
 			.article-container {
@@ -39,14 +39,21 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 				grid-template-columns: 1fr 250px;
 				gap: 3rem;
 				align-items: start;
+				justify-items: center;
 			}
 			@media (max-width: 1200px) {
 				.article-container {
 					grid-template-columns: 1fr;
 				}
 			}
+			article {
+				width: 100%;
+				max-width: 820px;
+			}
 			.hero-image {
 				width: 100%;
+				max-width: 720px;
+				margin: 0 auto;
 			}
 			.hero-image img {
 				display: block;
@@ -75,6 +82,10 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 			.last-updated-on {
 				font-style: italic;
 			}
+			aside {
+				position: sticky;
+				top: 2rem;
+			}
 		</style>
 	</head>
 
@@ -101,7 +112,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 							<h1>{title}</h1>
 							<hr />
 						</div>
-						<div class="prose prose-zinc dark:prose-invert max-w-none lg:prose-lg">
+						<div class="prose prose-zinc dark:prose-invert max-w-none lg:prose-lg ">
 							<slot />
 						</div>
 						<!-- Twikoo 评论组件 -->
