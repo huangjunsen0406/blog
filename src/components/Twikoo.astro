@@ -1,0 +1,75 @@
+---
+const TWIKOO_URL = "https://twikoo.junsen.online"; // 临时测试地址
+const LANG = "zh-CN"; // 或 "en" 等
+---
+
+<div id="tcomment" class="mt-8"></div>
+
+<script is:inline define:vars={{ TWIKOO_URL, LANG }}>
+  // 标记脚本是否已加载
+  let twikooScriptLoaded = false;
+
+  const initTwikoo = () => {
+    const el = document.querySelector("#tcomment");
+    if (!el) return;
+    
+    // 清理旧实例，防止在 Astro 跳转后重复渲染
+    el.innerHTML = "";
+
+    // 确保 twikoo 已加载后再初始化
+    if (typeof twikoo !== "undefined") {
+      twikoo.init({
+        envId: TWIKOO_URL, // Cloudflare Workers 部署的完整 URL
+        el: "#tcomment",
+        lang: LANG,
+        // 如果需要自定义路径，可以取消下面的注释
+        // path: window.location.pathname,
+      }).catch((err) => {
+        console.error("Twikoo 初始化失败:", err);
+      });
+    }
+  };
+
+  const loadTwikoo = () => {
+    // 避免重复加载脚本
+    if (twikooScriptLoaded || document.querySelector('script[src*="twikoo"]')) {
+      initTwikoo();
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.min.js";
+    // 移除 integrity 校验以避免加载失败
+    script.crossOrigin = "anonymous";
+    script.defer = true;
+    
+    script.onload = () => {
+      twikooScriptLoaded = true;
+      initTwikoo();
+    };
+    
+    script.onerror = () => {
+      console.error("Twikoo 脚本加载失败，尝试使用备用 CDN");
+      // 使用备用 CDN
+      const backupScript = document.createElement("script");
+      backupScript.src = "https://unpkg.com/twikoo@1.6.44/dist/twikoo.min.js";
+      backupScript.onload = () => {
+        twikooScriptLoaded = true;
+        initTwikoo();
+      };
+      document.head.appendChild(backupScript);
+    };
+    
+    document.head.appendChild(script);
+  };
+
+  // Astro 页面加载事件
+  document.addEventListener("astro:page-load", loadTwikoo);
+  
+  // 首次加载
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadTwikoo);
+  } else {
+    loadTwikoo();
+  }
+</script>

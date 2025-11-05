@@ -6,8 +6,6 @@ tags: ["前端笔记"]
 categories: ["前端笔记"]
 ---
 
-# JavaScript内功修炼：内存管理与分代垃圾回收机制详解
-
 ## JavaScript引擎的由来
 
 > JavaScript引擎的发展历史可以追溯到1995年，当时Netscape公司在其Netscape Navigator浏览器中引入了一种名为LiveScript的脚本语言。随后，这种语言被更名为JavaScript。随着互联网的快速发展，JavaScript迅速成为Web开发的核心语言，用于为网页添加交互性和动态内容。

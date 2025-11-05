@@ -7,6 +7,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TableOfContents from '../components/TableOfContents.vue';
+import Twikoo from '../components/Twikoo.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	headings?: MarkdownHeading[];
@@ -53,12 +54,10 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 				border-radius: 12px;
 				box-shadow: var(--box-shadow);
 			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
+			.article-content {
+				max-width: 720px;
+				margin: 0 auto;
 				padding: 1em;
-				color: rgb(var(--gray-dark));
 			}
 			.title {
 				margin-bottom: 1em;
@@ -87,7 +86,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 					<div class="hero-image">
 						{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 					</div>
-					<div class="prose">
+					<div class="article-content">
 						<div class="title">
 							<div class="date">
 								<FormattedDate date={pubDate} />
@@ -102,7 +101,11 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 							<h1>{title}</h1>
 							<hr />
 						</div>
-						<slot />
+						<div class="prose prose-zinc dark:prose-invert max-w-none lg:prose-lg">
+							<slot />
+						</div>
+						<!-- Twikoo 评论组件 -->
+						<Twikoo />
 					</div>
 				</article>
 				{headings.length > 0 && (

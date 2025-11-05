@@ -1,9 +1,18 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "LXGWZhenKai";
+  src: url("../assets/fonts/LXGWZhenKai-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
 @theme inline {
+  --font-lxgw: "LXGWZhenKai";
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -112,49 +121,29 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.274 0.006 286.033);
   --sidebar-ring: oklch(0.442 0.017 285.786);
-  --title:  #6b7fff;
+  --title: #6b7fff;
 }
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: "Atkinson", sans-serif;
+    @apply bg-background text-foreground font-lxgw;
     margin: 0;
     padding: 0;
     text-align: left;
     background-size: 100% 600px;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    font-size: 20px;
     line-height: 1.7;
   }
 }
 
-/* Custom blog styles */
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+  width: 720px;
+  max-width: calc(100% - 2em);
+  margin: auto;
+  padding: 3em 1em;
 }
 
 h1,
@@ -163,107 +152,109 @@ h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
-	line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
 }
 
 h1 {
-	font-size: 3.052em;
+  font-size: 3.052em;
 }
 
 h2 {
-	font-size: 2.441em;
+  font-size: 2.441em;
 }
 
 h3 {
-	font-size: 1.953em;
+  font-size: 1.953em;
 }
 
 h4 {
-	font-size: 1.563em;
+  font-size: 1.563em;
 }
 
 h5 {
-	font-size: 1.25em;
+  font-size: 1.25em;
 }
 
 strong,
 b {
-	font-weight: 700;
+  font-weight: 700;
 }
 
 p {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 .prose p {
-	margin-bottom: 2em;
+  margin-bottom: 2em;
 }
 
 textarea {
-	width: 100%;
-	font-size: 16px;
+  width: 100%;
+  font-size: 16px;
 }
 
 input {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 table {
-	width: 100%;
+  width: 100%;
 }
 
 img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 
 code {
-	padding: 2px 5px;
-	border-radius: 2px;
+  padding: 2px 5px;
+  border-radius: 2px;
 }
 
 pre {
-	padding: 1.5em;
-	border-radius: 8px;
+  padding: 1.5em;
+  border-radius: 8px;
 }
 
 pre > code {
-	all: unset;
+  all: unset;
 }
 
 blockquote {
-	border-left: 4px solid hsl(var(--accent));
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+  border-left: 4px solid hsl(var(--accent));
+  padding: 0 0 0 20px;
+  margin: 0px;
+  font-size: 1.333em;
 }
 
 hr {
-	border: none;
-	border-top: 1px solid hsl(var(--border));
+  border: none;
+  border-top: 1px solid hsl(var(--border));
 }
 
 @media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+  main {
+    padding: 1em;
+  }
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	clip: rect(1px 1px 1px 1px);
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+a,
+a:visited {
+  @apply no-underline;
 }

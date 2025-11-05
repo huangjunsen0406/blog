@@ -2,7 +2,7 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 import vue from '@astrojs/vue';
 import tailwindcss from '@tailwindcss/vite';
@@ -15,6 +15,20 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://example.com',
+  experimental: {
+    fonts: [
+      {
+        name: 'LXGWZhenKai',
+        cssVariable: '--font-lxgw',
+        provider: 'local',
+        variants: [
+          {
+            src: ['./src/assets/fonts/LXGWZhenKai-Regular.ttf'],
+          }
+        ],
+      },
+    ],
+  },
   integrations: [
     mdx({
       remarkPlugins: [remarkMath, remarkGfm],
