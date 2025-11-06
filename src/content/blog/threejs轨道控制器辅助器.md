@@ -6,8 +6,6 @@ tags: ["web3d","threejs","webgl"]
 categories: ["threejs"]
 ---
 
-#  threejs轨道控制器辅助器
-
 > OrbitControlsHelper 由来，由于项目需要threejs默认的轨道控制器无法以模型为中心上下左右旋转，而是以修改相机视角达到视角旋转的效果当通过鼠标右键移动控制器后，相机的旋转会以世界中心旋转。
 >
 > OrbitControlsHelper 可以把旋转中心从世界中心坐标改为模型中心旋转，可以参考下面的代码去理解。最后的是抽取成辅助类形式去调用
