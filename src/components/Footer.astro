@@ -21,6 +21,15 @@ const today = new Date();
 		</a>
 	</div>
 	<div class="copyright">&copy; {today.getFullYear()} Junsen here. All rights reserved.</div>
+	<div class="site-stats">
+		<span id="busuanzi_container_site_uv">
+			本站访客数 <span id="busuanzi_value_site_uv">-</span> 人次
+		</span>
+		<span class="separator">|</span>
+		<span id="busuanzi_container_site_pv">
+			本站总访问量 <span id="busuanzi_value_site_pv">-</span> 次
+		</span>
+	</div>
 	<div class="beian">
 		<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">粤ICP备2023129632号-1</a>
 	</div>
@@ -58,6 +67,20 @@ const today = new Date();
 	.copyright {
 		margin-bottom: 0.5em;
 	}
+	.site-stats {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		font-size: 0.9em;
+		color: rgb(var(--gray));
+	}
+	.site-stats .separator {
+		margin: 0 0.5em;
+		color: rgb(var(--gray-light));
+	}
+	#busuanzi_value_site_uv,
+	#busuanzi_value_site_pv {
+		font-weight: 600;
+	}
 	.beian {
 		margin-top: 0.5em;
 		font-size: 0.9em;
@@ -85,6 +108,9 @@ const today = new Date();
 		.copyright {
 			font-size: 0.9em;
 		}
+		.site-stats {
+			font-size: 0.85em;
+		}
 		.beian {
 			font-size: 0.85em;
 		}
@@ -103,6 +129,15 @@ const today = new Date();
 		}
 		.copyright {
 			font-size: 0.85em;
+		}
+		.site-stats {
+			font-size: 0.8em;
+			display: flex;
+			flex-direction: column;
+			gap: 0.25em;
+		}
+		.site-stats .separator {
+			display: none;
 		}
 		.beian {
 			font-size: 0.8em;

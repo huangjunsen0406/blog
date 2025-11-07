@@ -12,6 +12,18 @@ const friends = [
 		avatar: 'https://blog.p0.ee/img/Logo.png',
 		description: '这是一个基于兴趣学习并搭建的小博客，以收集分享各类有趣的东西为主，欢迎访问！',
 	},
+	{
+		name: 'dell',
+		url: 'https://blog.zgeek.eu.org',
+		avatar: '',
+		description: '',
+	},
+	{
+		name: 'qqwj',
+		url: 'https://studynote.qqwj.top',
+		avatar: '',
+		description: '',
+	},
 ];
 ---
 
@@ -233,7 +245,17 @@ const friends = [
 				{friends.map((friend) => (
 					<li class="friend-item">
 						<a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-link">
-							<img src={friend.avatar} alt={friend.name} class="friend-avatar" />
+							<img
+								src={
+									friend.avatar ||
+									`https://api.dicebear.com/6.x/identicon/svg?seed=${encodeURIComponent(
+										friend.name || friend.url || Math.random().toString(36).slice(2)
+									)}&size=64`
+								}
+								alt={friend.name}
+								class="friend-avatar"
+								loading="lazy"
+							/>
 							<div class="friend-info">
 								<h3 class="friend-name">{friend.name}</h3>
 								<p class="friend-description">{friend.description}</p>
