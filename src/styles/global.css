@@ -140,9 +140,9 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     overflow-x: hidden;
-    width: 100%;
+    /* width: 100%;
     position: relative;
-    line-height: 1.7;
+    line-height: 1.7; */
   }
 }
 
