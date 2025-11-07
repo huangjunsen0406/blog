@@ -45,6 +45,14 @@ const searchData = posts.map((post) => ({
 			</div>
 			<div class="nav-actions">
 				<Search client:load posts={searchData} />
+				<!-- RSS 链接 -->
+				<a href="/rss.xml" class="rss-link" title="订阅 RSS" aria-label="RSS feed" rel="noopener noreferrer">
+					<svg viewBox="0 0 24 24" class="rss-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<path d="M6.18 17.82a2.18 2.18 0 1 0 0 4.36 2.18 2.18 0 0 0 0-4.36z" />
+						<path d="M4 6v3.49c7.18 0 12.51 5.33 12.51 12.51H20C20 12.48 11.52 4 4 4z" opacity="0.9" />
+						<path d="M4 11v3.49c4.8 0 8.69 3.9 8.69 8.69H16C16 16.64 11.36 12 4 12z" />
+					</svg>
+				</a>
 				<ThemeToggle class="px-[0.5em]" client:load />
 			</div>
 		</div>
@@ -62,8 +70,8 @@ const searchData = posts.map((post) => ({
 		hamburger.setAttribute('aria-expanded', String(!isExpanded));
 	});
 
-	// 点击导航链接后关闭菜单
-	document.querySelectorAll('.nav-links a').forEach(link => {
+	// 点击导航链接后关闭菜单（包括 nav-links 和 nav-actions 内的链接）
+	document.querySelectorAll('.nav-links a, .nav-actions a').forEach(link => {
 		link.addEventListener('click', () => {
 			hamburger?.classList.remove('active');
 			navMenu?.classList.remove('active');
@@ -105,6 +113,27 @@ const searchData = posts.map((post) => ({
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+
+	/* RSS 图标样式 */
+	.rss-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 8px;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.rss-link:hover {
+		background: rgba(0,0,0,0.04);
+	}
+
+	.rss-icon {
+		width: 20px;
+		height: 20px;
 	}
 
 	nav a {
