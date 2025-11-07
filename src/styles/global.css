@@ -130,7 +130,6 @@
   }
   html {
     width: 100%;
-    max-width: 100vw;
   }
   body {
     @apply bg-background text-foreground font-lxgw;
@@ -141,16 +140,16 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     width: 100%;
-    max-width: 100vw;
     position: relative;
     line-height: 1.7;
   }
-
-  /* 只在移动端需要时才隐藏横向溢出 */
+  
   @media (max-width: 768px) {
-    html,
+    html {
+      overflow-x: clip;
+    }
     body {
-      overflow-x: hidden; /* 或者用 clip 更干净：overflow-x: clip; */
+      overflow-x: clip;
     }
   }
 }
