@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
@@ -48,6 +49,12 @@ export default defineConfig({
     }),
     sitemap(),
     vue(),
+    mermaid({
+      mermaidConfig: {
+        securityLevel: 'loose',
+        theme: 'default',
+      },
+    }),
   ],
 
   vite: {

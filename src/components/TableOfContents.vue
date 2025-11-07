@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
 interface Heading {
   depth: number;
@@ -12,25 +12,50 @@ const props = defineProps<{
 }>();
 
 const activeId = ref('');
+const tocListRef = ref<HTMLElement | null>(null);
 
 const handleScroll = () => {
   const headingElements = props.headings
     .map(({ slug }) => document.getElementById(slug))
     .filter((el): el is HTMLElement => el !== null);
 
-  const scrollPosition = window.scrollY + 100;
+  const scrollPosition = window.scrollY + 150;
 
-  for (let i = headingElements.length - 1; i >= 0; i--) {
+  let currentActiveId = '';
+  
+  for (let i = 0; i < headingElements.length; i++) {
     const element = headingElements[i];
-    if (element.offsetTop <= scrollPosition) {
-      activeId.value = element.id;
+    const elementTop = element.offsetTop;
+    
+    if (elementTop <= scrollPosition) {
+      currentActiveId = element.id;
+    } else {
       break;
     }
+  }
+
+  if (currentActiveId && currentActiveId !== activeId.value) {
+    activeId.value = currentActiveId;
+    nextTick(() => {
+      scrollActiveItemIntoView();
+    });
+  }
+};
+
+const scrollActiveItemIntoView = () => {
+  if (!tocListRef.value) return;
+  
+  const activeElement = tocListRef.value.querySelector('.toc-active');
+  if (activeElement) {
+    activeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    });
   }
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 });
 
@@ -41,7 +66,7 @@ onUnmounted(() => {
 const scrollToHeading = (slug: string) => {
   const element = document.getElementById(slug);
   if (element) {
-    const offset = 80;
+    const offset = 100;
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -56,7 +81,7 @@ const scrollToHeading = (slug: string) => {
 <template>
   <nav class="toc">
     <h3 class="toc-title">目录</h3>
-    <ul class="toc-list">
+    <ul class="toc-list" ref="tocListRef">
       <li
         v-for="heading in headings"
         :key="heading.slug"
@@ -80,14 +105,14 @@ const scrollToHeading = (slug: string) => {
 
 <style scoped>
 .toc {
-  position: sticky;
-  top: 2rem;
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 1.5rem;
   background: rgba(var(--gray-light), 0.1);
   border-radius: 0.5rem;
   border: 1px solid rgb(var(--gray-light));
+  box-sizing: border-box;
 }
 
 .toc-title {
@@ -95,17 +120,23 @@ const scrollToHeading = (slug: string) => {
   font-weight: 600;
   margin: 0 0 1rem 0;
   color: rgb(var(--black));
+  flex-shrink: 0;
 }
 
 .toc-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
 }
 
 .toc-item {
   margin: 0.5rem 0;
   line-height: 1.6;
+  transition: all 0.2s ease;
 }
 
 .toc-level-2 {
@@ -124,34 +155,37 @@ const scrollToHeading = (slug: string) => {
   text-decoration: none;
   color: var(--ring);
   font-size: 0.875rem;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
   display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
 }
 
 .toc-link:hover {
   color: var(--title);
+  background: rgba(var(--gray-light), 0.1);
 }
 
 .toc-active .toc-link {
   color: var(--title);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* 滚动条样式 */
-.toc::-webkit-scrollbar {
+.toc-list::-webkit-scrollbar {
   width: 4px;
 }
 
-.toc::-webkit-scrollbar-track {
+.toc-list::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.toc::-webkit-scrollbar-thumb {
-  background: rgb(var(--gray-light));
+.toc-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--gray-light), 0.5);
   border-radius: 2px;
 }
 
-.toc::-webkit-scrollbar-thumb:hover {
+.toc-list::-webkit-scrollbar-thumb:hover {
   background: rgb(var(--gray));
 }
 

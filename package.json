@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.1.16",
     "@vueuse/core": "^14.0.0",
     "astro": "^5.15.3",
+    "astro-mermaid": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.552.0",
