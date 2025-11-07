@@ -50,6 +50,19 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 				width: 100%;
 				box-sizing: border-box;
 			}
+			
+			/* 移动端防止横向溢出 */
+			@media (max-width: 768px) {
+				html, body {
+					overflow-x: hidden;
+				}
+				main {
+					overflow-x: hidden;
+				}
+				.article-container {
+					overflow-x: hidden;
+				}
+			}
 			/* 平板及以下 - 隐藏目录 */
 			@media (max-width: 1200px) {
 				.article-container {
@@ -95,11 +108,13 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 					width: 100%;
 					max-width: 100%;
 					padding: 0;
+					overflow-x: hidden;
 				}
 				.article-content {
 					padding: 0.5em 0.5rem;
 					width: 100%;
 					max-width: 100%;
+					overflow-x: hidden;
 				}
 				.title {
 					padding: 0.75em 0;
@@ -357,6 +372,7 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 				word-wrap: break-word;
 				overflow-wrap: break-word;
 				box-sizing: border-box;
+				overflow-x: auto;
 			}
 			.prose * {
 				max-width: 100% !important;
