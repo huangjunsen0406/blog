@@ -8,6 +8,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TableOfContents from '../components/TableOfContents.vue';
 import ImageViewer from '../components/ImageViewer.vue';
+import MermaidZoomModal from '../components/MermaidZoomModal.vue';
 import Twikoo from '../components/Twikoo.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
@@ -496,5 +497,6 @@ const { title, description, pubDate, updatedDate, heroImage, headings = [] } = A
 		</main>
 		<Footer />
 		<ImageViewer client:only="vue" />
+		<MermaidZoomModal client:only="vue" />
 	</body>
 </html>

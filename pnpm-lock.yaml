@@ -20,6 +20,9 @@ importers:
       '@astrojs/vue':
         specifier: ^5.1.2
         version: 5.1.2(@types/node@24.10.0)(astro@5.15.3(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.52.5)(typescript@5.9.3))(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.52.5)(vue@3.5.23(typescript@5.9.3))
+      '@panzoom/panzoom':
+        specifier: ^4.6.2
+        version: 4.6.2
       '@tailwindcss/vite':
         specifier: ^4.1.16
         version: 4.1.16(vite@6.4.1(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2))
@@ -638,6 +641,9 @@ packages:
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
+
+  '@panzoom/panzoom@4.6.2':
+    resolution: {integrity: sha512-Zn3B5/hwa6eYIPRSKX0xf2clv8nviTX8AnAU5kU/EugiTDhG41ya2wlBqYrZJYCWQROr/5XkWObZhIkepi89qw==}
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -3577,6 +3583,8 @@ snapshots:
       langium: 3.3.1
 
   '@oslojs/encoding@1.1.0': {}
+
+  '@panzoom/panzoom@4.6.2': {}
 
   '@polka/url@1.0.0-next.29': {}
 

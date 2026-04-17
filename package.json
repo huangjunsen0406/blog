@@ -13,6 +13,7 @@
     "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/vue": "^5.1.2",
+    "@panzoom/panzoom": "^4.6.2",
     "@tailwindcss/vite": "^4.1.16",
     "@vueuse/core": "^14.0.0",
     "astro": "^5.15.3",
