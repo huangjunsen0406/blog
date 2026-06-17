@@ -1,11 +1,9 @@
 ---
 title: "逆向拆解 Cursor Continue：一个绕过 Cursor 付费限制的插件是如何实现的"
 description: "从混淆 VSIX 逆向还原，深入分析插件如何通过源码级补丁绕过 Cursor 的付费墙、API 限流和重试限制，实现高级模型的超额使用"
-pubDate: '2026-04-16 14:28:00'
+pubDate: '2026-06-17 14:28:00'
 tags: ["Cursor", "逆向分析", "VSCode扩展", "安全研究", "付费绕过"]
 ---
-
-# 逆向拆解 Cursor Continue：一个绕过 Cursor 付费限制的插件是如何实现的
 
 ## 前言
 
@@ -286,7 +284,7 @@ $ cursor-continue-core prompt wait --port 9999 --secret test
 
 ### 2.6 交叉验证
 
-后来我找到了一份功能等价的开源重实现——**Cursor Continue Native**（v1.1.22），纯 JS、无混淆、无 Go 二进制、无授权，约 3300 行代码。对照这份清晰的源码，我验证了之前逆向得出的所有结论：
+基于上述逆向成果，我用纯 JS 反推并重构了一份功能等价的纯净版本——**Cursor Continue Native**，无混淆、无 Go 二进制、无授权，约 3300 行代码。通过亲自实现这份代码，我彻底验证了之前逆向得出的所有结论：
 
 - 桥接协议完全一致（HTTP 长轮询 + `/request` 端点）
 - 补丁逻辑完全一致（P1/P2/P3 正则 + P4 配置替换）
@@ -294,7 +292,7 @@ $ cursor-continue-core prompt wait --port 9999 --secret test
 
 Native 版本还多了 `fs.writeFileSync` 抗更新机制和 P4 MCP 激进重连补丁——这些都是原版没有的改进。
 
-下面的技术细节分析基于逆向成果和开源源码的交叉验证。
+下面的技术细节分析基于逆向成果和我重构的代码进行的交叉验证。
 
 ---
 
@@ -644,18 +642,18 @@ Cursor 用 Facebook Lexical 编辑器，不能简单清 DOM。实现了五重清
 
 ## 九、两个版本的对比
 
-我对照分析了原版（混淆的 cursor-continue v0.5.9）和开源重实现（cursor-continue-native v1.1.22）：
+我对照分析了原版（混淆的 cursor-continue v0.5.9）和我反推重构的纯净版（cursor-continue-native v1.1.22）：
 
 | 维度 | cursor-continue (v0.5.9) | cursor-continue-native (v1.1.22) |
 |------|--------------------------|----------------------------------|
 | 代码 | TypeScript → esbuild → javascript-obfuscator | 纯 JavaScript，无编译无混淆 |
 | 核心业务 | Go 二进制（6 平台 ~95MB） | 纯 Node.js（154 行桥接脚本） |
-| 授权 | Ed25519 签名 + 卡密 + 在线校验 | 无授权（MIT 开源） |
+| 授权 | Ed25519 签名 + 卡密 + 在线校验 | 无授权（纯净重构版） |
 | 用户交互 | 底部 Webview 面板 | 原生聊天框 CC 按钮 |
 | 补丁 | P1/P2/P3 + cc-hook 指示器 | P1/P2/P3/**P4** + 完整 CC 按钮 |
 | 抗更新 | 无（更新后需重装） | Monkey-Patch `fs.writeFileSync` |
 
-原版多了授权和 Go 二进制的壳，Native 版本去掉了这些，补丁反而多了 P4（MCP 激进重连），还加了 `fs.writeFileSync` 抗更新机制。
+原版多了授权和 Go 二进制的壳，我重构的 Native 版本去掉了这些，补丁反而多了 P4（MCP 激进重连），还加了 `fs.writeFileSync` 抗更新机制。
 
 ---
 
