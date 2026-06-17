@@ -148,7 +148,65 @@ MDN 对它的解释非常形象：如果一个元素的内容模型是“透明�
 | `section`/`article`/`nav` | `section` 是主题性分区；`article` 是可独立分发/复用的完整单元；`nav` 是主要导航区块。 | 把 `section` 当纯样式容器，或把任何链接堆都包进 `nav`。 | DOM 通常不修正；但会让页面轮廓、地标与辅助技术理解失真。`nav` 还会被某些用户代理用来决定跳过或快速定位导航。 |
 | `header`/`footer` | 分别表示引导性/导航性头部信息与最近 sectioning ancestor 的页脚；二者**都不是** sectioning content。 | 误以为它们天然“开启新 section”，或在里面再套 `header`/`footer`。 | 浏览器会照样渲染，但文档轮廓与 landmark 语义会偏离作者预期；规范也禁止其互相嵌套后代。 |
 
-## 七、最佳实践清单
+## 七、隐式 ARIA 语义与辅助技术
+
+HTML 语义在无障碍层面真正落地，不是靠“元素名字看起来很语义化”，而是靠浏览器把 HTML 元素与属性映射到 accessibility APIs 的那一步。这里真正该看的，不只是 HTML Standard 本身，还包括 **ARIA in HTML** 与 **HTML-AAM** (HTML Accessibility API Mappings)。前者规定作者能不能在某个 HTML 元素上声明某个 ARIA role / `aria-*`；后者规定浏览器和辅助技术应该把它映射成什么。这两者合起来，才是隐式 ARIA 语义的完整图景。
+
+最基础的一层，是很多元素天然就拥有隐式角色。比如 `nav` -> `navigation`、`main` -> `main`、`a[href]` -> `link`；而 `a` 没有 `href` 时，隐式角色就退化成 `generic`。这个“是否具备某个属性就改变语义”的规律，在表单控件上尤其明显：`input type=number` 是 `spinbutton`，`input type=radio` 是 `radio`，`input type=search` 在没有 `list` 时是 `searchbox`，而 `input type=password` 在 AAM 里甚至是 “No corresponding role”。也就是说，隐式语义并不只由标签名决定，还由状态和属性共同决定。
+
+还有一层更容易被忽略：**上下文也会改语义**。`header` 不是无条件都等于 `banner`，`footer` 也不是无条件都等于 `contentinfo`。在 ARIA in HTML 和 HTML-AAM 里都明确了：当它们直接作用于页面主体范围时，会映射成 landmark；但当它们落在 `article`、`section`、`main`、`nav` 等 sectioning context 里时，更接近 section header / section footer，甚至可能退化为 generic 或不一定被暴露。类似地，`section` 只有在有 accessible name 时才会映射成 `region`，否则只是 `generic`。这其实正好和很多前端习惯相反：很多人把 `section` 当“有语义的 div”，但对屏幕阅读器来说，一个没名字的 `section` 基本就只是个容器。
+
+```html
+<header>
+  <h1>站点标题</h1>
+</header>
+
+<section>
+  <h2>只是分块，但没有命名</h2>
+</section>
+
+<section aria-labelledby="hot-title">
+  <h2 id="hot-title">热门文章</h2>
+</section>
+
+<a>这不是链接，只是 generic 容器</a>
+<a href="/docs">这才是 link</a>
+```
+
+上面几行代码里，第一个 `header` 通常会成为页面级 `banner`；第二个 `section` 如果没有被命名，通常只是 `generic`；第三个 `section` 因为有 accessible name，会提升成 `region`；两个 `a` 的差别则完全取决于 `href` 是否存在。
+
+这就引出另一个常被误解的问题：**显式 ARIA 和原生 HTML，谁优先？** ARIA in HTML 说得很清楚：作者可以使用 ARIA 来改变暴露出来的语义，但前提是不能和宿主语言的强原生语义冲突；如果 HTML 原生属性已经和某个 `aria-*` 有语义对位关系，那么原生 HTML 优先，作者不应该同时声明两份语义。比如有 `disabled` 就不该再写 `aria-disabled="true"`；有 `required` 就不该再写 `aria-required`；有 `hidden` 时，等价语义其实已经是 `aria-hidden="true"`。
+
+这也是为什么 “不要写重复 role” 不是洁癖，而是对辅助技术一致性的基本尊重。`<button role="button">`、`<main role="main">` 这种写法，在规范里都被明确标成“NOT RECOMMENDED”。因为它既不增加语义，反而会让代码更难维护；一旦你日后改了元素类型、属性状态或交互模式，显式 ARIA 还有可能开始和原生语义打架。WAI-ARIA APG 里那句经典提醒我觉得放在这里非常合适：**No ARIA is better than Bad ARIA**。对屏幕阅读器用户来说，ARIA 改的是他们的“非视觉渲染层”；写错了，就不是“有点多余”，而是“直接说错话”。
+
+```html
+<!-- 不推荐：重复原生语义 -->
+<button role="button">保存</button>
+<main role="main">...</main>
+
+<!-- 更推荐：让 HTML 自己说话 -->
+<button>保存</button>
+<main>...</main>
+```
+
+在屏幕阅读器实际体验里，语义结构最重要的价值并不是“朗读得更玄学”，而是让用户能按 landmark、heading、list、table、form control 这些抽象层级跳转。WebAIM 对 semantic structure 的总结非常到位：`header`、`nav`、`main`、`aside`、`footer` 这些 page regions，会让屏幕阅读器用户快速在主要区域间移动。也正因为如此，原生语义越完整，辅助技术越不需要你再手工补角色。
+
+```html
+<nav aria-label="主导航">
+  <a href="/">首页</a>
+  <a href="/docs">文档</a>
+</nav>
+
+<form>
+  <label for="q">站内搜索</label>
+  <input id="q" type="search" />
+  <button>搜索</button>
+</form>
+```
+
+这一段代码几乎不需要额外 ARIA，就已经天然具备 `navigation`、`searchbox`、`button` 等可被辅助技术利用的语义。真正值得你手动补的，通常不是 role 本身，而是 accessible name。
+
+## 八、最佳实践清单
 
 - 第一行始终写 `<!doctype html>`，而且放在真正的文档开头；现代标准已经明确，这个 doctype 的唯一现实作用就是稳定地触发 no-quirks。更复杂的旧 doctype 没有正当收益，反而可能触发 limited-quirks 或 quirks；`about:legacy-compat` 只在某些 XML 工具链兼容场景下才值得提。
 - 在根 `html` 元素上显式写 `lang`。这不是“锦上添花”，而是规范直接写出来、会影响语音合成与翻译工具判断的元信息。
@@ -173,3 +231,7 @@ MDN 对它的解释非常形象：如果一个元素的内容模型是“透明�
 9. [Content categories - HTML | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Content_categories)
 10. [Anatomy of the DOM - MDN](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Anatomy_of_the_DOM)
 11. [Void element - MDN Web Docs Glossary](https://developer.mozilla.org/en-US/docs/Glossary/Void_element)
+12. [ARIA in HTML | W3C](https://www.w3.org/TR/html-aria/)
+13. [HTML Accessibility API Mappings 1.0 | W3C](https://www.w3.org/TR/html-aam-1.0/)
+14. [WAI-ARIA Authoring Practices Guide (APG) | W3C](https://www.w3.org/WAI/ARIA/apg/)
+15. [Semantic Structure | WebAIM](https://webaim.org/techniques/semanticstructure/)
