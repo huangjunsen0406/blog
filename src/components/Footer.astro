@@ -1,4 +1,6 @@
 ---
+import atomgitMark from '../assets/atomgit-mark.png';
+
 const today = new Date();
 ---
 
@@ -18,6 +20,18 @@ const today = new Date();
 			<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
 				<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
 			</svg>
+		</a>
+		<a
+			href="https://atomgit.com/huangjunsen0406"
+			target="_blank"
+			rel="noopener noreferrer"
+			title="AtomGit"
+		>
+			<span
+				class="atomgit-mark"
+				role="img"
+				aria-label="AtomGit"
+				style={`--atomgit-mask: url(${atomgitMark.src})`}></span>
 		</a>
 	</div>
 	<div class="copyright">&copy; {today.getFullYear()} Junsen here. All rights reserved.</div>
@@ -63,6 +77,21 @@ const today = new Date();
 	.social-links svg {
 		width: 24px;
 		height: 24px;
+	}
+	/* 用遮罩取图形、颜色跟随 currentColor，和另外三个 SVG 完全同色同重量 */
+	.social-links .atomgit-mark {
+		width: 22px;
+		height: 22px;
+		display: block;
+		background-color: currentColor;
+		-webkit-mask-image: var(--atomgit-mask);
+		mask-image: var(--atomgit-mask);
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
+		-webkit-mask-size: contain;
+		mask-size: contain;
 	}
 	.copyright {
 		margin-bottom: 0.5em;
